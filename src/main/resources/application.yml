@@ -1,0 +1,43 @@
+server:
+  port: 8001
+  tomcat:
+    mbeanregistry:
+      enabled: true
+
+spring:
+  application:
+    name: Demo
+  datasource:
+    name: demo
+    username: user
+    password: "password"
+    url: jdbc:mysql://localhost:3307/demo?serverTimezone=Asia/Jakarta&useSSL=false
+    hikari:
+      connection-test-query: SELECT 1;
+      connection-timeout: 30000
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      validation-timeout: 28000
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+      # Hibernate by default using the lowercase table name so to keep the original name this config is needed.
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+    # This config enables Spring to open session in each request even without @Transactional,
+    # making lazy object will be re-queried.
+    # https://www.baeldung.com/spring-open-session-in-view
+    # For temporary will be configured as true to minimize impact on existing code.
+    # Soon will be changed to false after update currently non transactional methods which calls lazy object.
+    open-in-view: false
+
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
